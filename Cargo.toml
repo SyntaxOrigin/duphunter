@@ -1,0 +1,30 @@
+[package]
+name = "duphunter"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.74"
+license = "MIT"
+description = "Akis tabanli karmalarla birebir kopya avci; hicbir dosyayi silmez, yalnizca kurtarma arsivine tasiyan kanit ureten terminal araci."
+repository = "https://github.com/SyntaxOrigin/duphunter"
+readme = "README.md"
+keywords = ["cli", "duplicate-files", "blake3", "deduplication", "disk"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+# serde: JSON kural dosyasi ve kanit raporu semasi icin turetilmis veri yuzleri (src/kurallar.rs, src/rapor.rs, src/arsiv.rs).
+serde = { version = "1", features = ["derive"] }
+# serde_json: kural dosyasi okuma/yazma, kanit raporu (JSON) ve arsiv manifesti serilestirmesi (src/kurallar.rs, src/rapor.rs, src/arsiv.rs).
+serde_json = "1"
+# clap: scan / hash-report / restore alt komutlarinin ve bayraklarinin ayristirilmasi (src/main.rs).
+clap = { version = "4", features = ["derive"] }
+# blake3: kademeli aday uretiminin 3. asamasinda tam akis BLAKE3 kaniti uretimi (src/karma.rs). MANIFEST kartinda tercih edilen kripto olmayan karma.
+blake3 = "1"
+# crc32fast: 2. asama hizli on eleme karmasi ve arsiv manifestindeki hizli butunluk sağlaması (src/karma.rs, src/arsiv.rs).
+crc32fast = "1"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+panic = "abort"
+strip = "debuginfo"
